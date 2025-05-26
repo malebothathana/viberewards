@@ -1,0 +1,30 @@
+
+Loyalty Rewards App - Pitch Deck
+
+Slide 1: Title
+- Loyalty Rewards App
+- A retention solution for local businesses
+
+Slide 2: Problem
+- Local salons and shops lack systems to track loyal customers.
+
+Slide 3: Solution
+- A simple app using phone numbers to track visits and reward loyal customers.
+
+Slide 4: Tech Stack
+- HTML, JavaScript (Frontend)
+- Supabase (Backend)
+
+Slide 5: How it works
+- User checks in with phone number
+- Existing users: visit count increases
+- New users: added to database
+
+Slide 6: Impact
+- Encourages repeat visits
+- Builds customer loyalty
+- Easy to use and deploy
+
+Slide 7: Demo & Link
+- GitHub Pages live link (to be added)
+- GitHub repo (to be added)

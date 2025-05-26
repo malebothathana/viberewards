@@ -1,0 +1,162 @@
+# 📄 SUPABASE_DOCUMENTATION.md
+
+## Supabase Documentation for Loyalty Rewards App
+
+This document outlines how Supabase is integrated into the Loyalty Rewards Web App.
+
+---
+
+### 🛠️ Supabase Setup
+
+1. **Create a Supabase Account:**
+   - Go to [https://supabase.com](https://supabase.com) and sign up or log in.
+
+2. **Create a New Project:**
+   - Name your project (e.g., `loyalty-rewards`).
+   - Set up a strong password and choose a region.
+   - Click **Create new project**.
+
+3. **Set Up Your Database Table:**
+
+```sql
+create table customers (
+  id uuid primary key default uuid_generate_v4(),
+  phone text unique not null,
+  visits int default 1,
+  created_at timestamp default now()
+);
+```
+
+4. **Create a Function to Increment Visits:**
+
+```sql
+create or replace function increment_visits(user_phone text)
+returns void as $$
+begin
+  update customers
+  set visits = visits + 1
+  where phone = user_phone;
+end;
+$$ language plpgsql;
+```
+
+5. **Enable API Access:**
+   - Go to **Project Settings > API**.
+   - Copy your `anon` public API key and project URL.
+
+---
+
+### 🔑 Supabase Client Setup
+
+In your HTML/JavaScript, import and initialize the Supabase client:
+
+```javascript
+import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+const supabaseUrl = 'https://your-project.supabase.co';
+const supabaseKey = 'your-anon-public-api-key';
+const supabase = createClient(supabaseUrl, supabaseKey);
+```
+
+Replace `supabaseUrl` and `supabaseKey` with your actual values from the Supabase dashboard.
+
+---
+
+### ✅ App Logic
+
+- When a phone number is entered and the "Check In" button is clicked:
+  - If the number exists: it calls the `increment_visits` RPC function.
+  - If the number doesn’t exist: a new customer record is created.
+
+---
+
+### 🔒 Security Best Practices
+
+- Use **Row-Level Security (RLS)** to control access to tables.
+- Never expose service_role keys in frontend code.
+- Use Edge Functions or backend servers for sensitive operations if needed.
+
+---
+
+### 📚 Resources
+
+- Supabase Docs: [https://supabase.com/docs](https://supabase.com/docs)
+- Supabase GitHub: [https://github.com/supabase/supabase](https://github.com/supabase/supabase)
+
+---
+
+# 📘 README.md
+
+## Loyalty Rewards App
+
+A lightweight web app to help small local businesses track customer visits using only a phone number.
+
+### 🧩 Features
+
+- 📱 Phone number-based check-ins
+- 📈 Visit tracking using Supabase
+- 🌐 Deployable on GitHub Pages or Vercel
+- 🛠️ Built using HTML, JavaScript & Supabase
+
+### 💾 How It Works
+
+1. A user enters their phone number.
+2. The app checks Supabase:
+   - If the user exists: it increments their visit count.
+   - If new: it creates a user with 1 visit.
+3. The result is displayed instantly.
+
+### 🚀 Tech Stack
+
+- Supabase (Backend + DB)
+- Supabase RPC Functions
+- JavaScript (Frontend)
+- HTML5
+
+### 🛠 Setup
+
+1. Clone the repo
+2. Replace `supabaseUrl` and `supabaseKey` in the HTML file
+3. Deploy on GitHub Pages or open locally
+
+---
+
+# 🖥️ PITCH_DECK_CONTENT.md
+
+## Slide 1: Title
+**Loyalty Rewards App**  
+Helping Small Businesses Retain Customers Through Visit Tracking
+
+## Slide 2: Problem
+**Local businesses lack a simple way to retain loyal customers.**  
+Most don’t have the resources for CRM or loyalty systems.
+
+## Slide 3: Solution
+**A lightweight, phone-number-based loyalty tracker**  
+Tracks visits, rewards loyalty – no downloads, no friction.
+
+## Slide 4: How It Works
+- User enters phone number
+- Visit is recorded or incremented
+- Customer receives feedback instantly
+
+## Slide 5: Tech Stack
+- Supabase: Backend & Database
+- HTML + JavaScript
+- Live, secure & fast
+- Deployable on GitHub Pages
+
+## Slide 6: Market Potential
+- Target: Barbershops, salons, eateries, kiosks
+- Huge need for digital loyalty tools in informal markets
+
+## Slide 7: Scalability
+- Add SMS rewards
+- Offer analytics dashboard
+- Expand to multi-branch businesses
+
+## Slide 8: Call to Action
+**Join us in digitizing loyalty**  
+Let’s help small businesses grow by rewarding their customers
+
+---

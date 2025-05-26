@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loyalty Rewards App</title>
+</head>
+<body>
+  <h1>Loyalty Rewards App</h1>
+
+  <input type="text" id="phoneInput" placeholder="Enter phone number" />
+  <button onclick="checkIn()">Check In</button>
+
+  <p id="status"></p>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+    const supabaseUrl = 'https://duaorlxntdftzslzhkki.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1YW9ybHhudGRmdHpzbHpoa2tpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgyOTE4ODIsImV4cCI6MjA2Mzg2Nzg4Mn0.Z8xSf45slhVCiV50HW8GQhqCEI2kWr0_fXVj4zvJ3Zo';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    async function checkIn() {
+      const phone = document.getElementById("phoneInput").value;
+      if (!phone) return alert("Please enter a phone number");
+
+      const { data: existing, error } = await supabase
+        .from('customers')
+        .select('*')
+        .eq('phone', phone)
+        .single();
+
+      if (existing) {
+        await supabase.rpc('increment_visits', { user_phone: phone });
+        const { data: updated } = await supabase
+          .from('customers')
+          .select('*')
+          .eq('phone', phone)
+          .single();
+        document.getElementById("status").textContent = `Welcome back! Visit count: ${updated.visits}`;
+      } else {
+        const { data: inserted } = await supabase
+          .from('customers')
+          .insert([{ phone }])
+          .select()
+          .single();
+        document.getElementById("status").textContent = `Welcome! You’ve been added. Visit count: ${inserted.visits}`;
+      }
+    }
+  </script>
+</body>
+</html>
